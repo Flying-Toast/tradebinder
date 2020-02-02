@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'homepage.apps.HomepageConfig',
+    'trading.apps.TradingConfig',
 ]
 
 MIDDLEWARE = [
