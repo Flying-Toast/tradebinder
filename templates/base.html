@@ -1,0 +1,24 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>{% block title %}{% endblock %}</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" href="{% static "global.css" %}">
+</head>
+
+<body>
+	<ul class="navbar">
+		<li class="nav-logo"><a href="{% url "homepage:home" %}">Trade Binder</a></li>
+		<li class="nav-item"><a class="nav-link" href="{% url "homepage:home" %}">item 1</a></li>
+		<li class="nav-item"><a class="nav-link" href="{% url "homepage:home" %}">item 2</a></li>
+		<li class="nav-item"><a class="nav-link" href="{% url "homepage:home" %}">item 3</a></li>
+		<li class="nav-item"><a class="nav-link" href="{% url "homepage:home" %}">Login</a></li>
+	</ul>
+	{% block content %}
+	{% endblock %}
+</body>
+
+</html>
