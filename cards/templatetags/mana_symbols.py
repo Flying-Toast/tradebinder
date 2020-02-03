@@ -1,5 +1,7 @@
 from django import template
 from django.templatetags.static import static
+from django.utils.encoding import escape_uri_path
+from django.utils.safestring import mark_safe
 
 
 register = template.Library()
@@ -12,10 +14,10 @@ def _render_code(code):
     elif "/" in code:
         code = "".join(code.split("/"))
     url = static(f"cards/symbols/{code}.svg")
-    return f"<img src={url}></img>"
+    return f'<img class="mana-symbol" src="{escape_uri_path(url)}"></img>'
 
 
-@register.filter
+@register.filter()
 def render_symbols(text):
     if len(text) == 0:
         return ""
@@ -41,4 +43,4 @@ def render_symbols(text):
             code += ch
         else:
             rendered_text += ch
-    return rendered_text
+    return mark_safe(rendered_text)
