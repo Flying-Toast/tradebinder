@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     'homepage.apps.HomepageConfig',
     'trading.apps.TradingConfig',
+    'cards.apps.CardsConfig',
 ]
 
 MIDDLEWARE = [
