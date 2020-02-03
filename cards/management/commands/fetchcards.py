@@ -1,11 +1,15 @@
 from datetime import date, datetime
 from decimal import Decimal
+from urllib.request import urlretrieve
 import requests
+import os
 from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
+from django.templatetags.static import static
 from cards import models
 
 
+SYMBOLDATA_URL = "https://api.scryfall.com/symbology"
 CARDDATA_URL = "https://archive.scryfall.com/json/scryfall-default-cards.json"
 SETDATA_URL = "https://api.scryfall.com/sets"
 
@@ -15,10 +19,48 @@ def get_or_none(json, prop):
     else:
         return None
 
+def static_path(subpath):
+    return os.path.dirname(__file__) + "/../.." + static(f"cards/{subpath}")
+
+def fetch_if_missing(url, output_subpath):
+    outpath = static_path(output_subpath)
+    if os.path.isfile(outpath):
+        return False
+    urlretrieve(url, outpath)
+    return True
+
+
 class Command(BaseCommand):
-    help = "Updates MTG data in the database"
+    help = "Updates MTG data"
+
+    def add_arguments(self, parser):
+        parser.add_argument("--db-only", action="store_true", help="Only update the database (no static content)")
+        parser.add_argument("--content-only", action="store_true", help="Only fetch static content (card images, etc)")
 
     def handle(self, *args, **options):
+        if options["db-only"]:
+            self.update_db()
+        elif options["content-only"]:
+            self.fetch_content()
+        else:
+            self.update_db()
+            self.fetch_content()
+
+    def fetch_content(self):
+        symbol_data = requests.get(SYMBOLDATA_URL).json()["data"]
+        self.stdout.write("Downloading mana symbols...")
+
+        num_skipped = 0
+        for i in symbol_data:
+            url = i["svg_uri"]
+            outsubpath = "symbols/" + os.path.basename(url)
+            if not fetch_if_missing(url, outsubpath):
+                num_skipped += 1
+        self.stdout.write(self.style.SUCCESS("\tDone."))
+        self.stdout.write(f"\tProcessed {len(symbol_data)} entries")
+        self.stdout.write(f"\tSkipped {num_skipped} already downloaded files")
+
+    def update_db(self):
         self.stdout.write("Downloading set data...")
         set_data = requests.get(SETDATA_URL).json()["data"]
         self.stdout.write(self.style.SUCCESS("\tDone."))
