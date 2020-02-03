@@ -57,7 +57,8 @@ body {
 
 .mana-symbol {
 	display: inline-block;
-	width: 15px;
-	height: 100%;
+	width: 16px;
 	vertical-align: middle;
+	position: relative;
+	bottom: 1px;
 }

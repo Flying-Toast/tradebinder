@@ -2,19 +2,21 @@ from django import template
 from django.templatetags.static import static
 from django.utils.encoding import escape_uri_path
 from django.utils.safestring import mark_safe
+from django.utils.html import escape
 
 
 register = template.Library()
 
 def _render_code(code):
+    alt_code = code
     if code == "½":
-        code = "HALF"
+        alt_code = "HALF"
     elif code == "∞":
-        code = "INFINITY"
+        alt_code = "INFINITY"
     elif "/" in code:
         code = "".join(code.split("/"))
     url = static(f"cards/symbols/{code}.svg")
-    return f'<img class="mana-symbol" src="{escape_uri_path(url)}"></img>'
+    return f'<img class="mana-symbol" src="{escape_uri_path(url)}" alt={escape(f"{{{alt_code}}}")}>'
 
 
 @register.filter()
