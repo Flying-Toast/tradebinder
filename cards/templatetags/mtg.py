@@ -19,7 +19,7 @@ def _render_code(code):
     return f'<img class="mana-symbol" src="{escape_uri_path(url)}" alt={escape(f"{{{alt_code}}}")}>'
 
 
-@register.filter()
+@register.filter
 def render_symbols(text):
     if len(text) == 0:
         return ""
