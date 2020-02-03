@@ -8,12 +8,12 @@ from django.utils.html import escape
 register = template.Library()
 
 def _render_code(code):
-    alt_code = code
     if code == "½":
-        alt_code = "HALF"
+        code = "HALF"
     elif code == "∞":
-        alt_code = "INFINITY"
-    elif "/" in code:
+        code = "INFINITY"
+    alt_code = code
+    if "/" in code:
         code = "".join(code.split("/"))
     url = static(f"cards/symbols/{code}.svg")
     return f'<img class="mana-symbol" src="{escape_uri_path(url)}" alt={escape(f"{{{alt_code}}}")}>'
