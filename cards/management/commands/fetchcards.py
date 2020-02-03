@@ -19,6 +19,9 @@ def get_or_none(json, prop):
     else:
         return None
 
+def make_static_dirs():
+    os.makedirs(static_path("symbols"))
+
 def static_path(subpath):
     return os.path.dirname(__file__) + "/../.." + static(f"cards/{subpath}")
 
@@ -38,15 +41,16 @@ class Command(BaseCommand):
         parser.add_argument("--content-only", action="store_true", help="Only fetch static content (card images, etc)")
 
     def handle(self, *args, **options):
-        if options["db-only"]:
+        if options["db_only"]:
             self.update_db()
-        elif options["content-only"]:
+        elif options["content_only"]:
             self.fetch_content()
         else:
             self.update_db()
             self.fetch_content()
 
     def fetch_content(self):
+        make_static_dirs()
         symbol_data = requests.get(SYMBOLDATA_URL).json()["data"]
         self.stdout.write("Downloading mana symbols...")
 
