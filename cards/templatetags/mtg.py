@@ -15,9 +15,9 @@ def render_code(code):
         code = "INFINITY"
     alt_code = code
     if "/" in code:
-        code = "".join(code.split("/"))
-    url = static(f"cards/symbols/{code}.svg")
-    return f'<img class="mana-symbol" src="{escape_uri_path(url)}" alt="{escape(f"{{{alt_code}}}")}">'
+        code = code.replace("/", "")
+    url = static(escape_uri_path(f"cards/symbols/{code}.svg"))
+    return f'<img class="mana-symbol" src="{url}" alt="{escape(f"{{{alt_code}}}")}">'
 
 
 @register.filter
@@ -53,4 +53,4 @@ def render_symbols(text):
 def card_img(card):
     if not isinstance(card, models.Card):
         raise TypeError("The card_img tag requires a 'cards.models.Card' as the argument")
-    return escape_uri_path(static(f"cards/card_imgs/{card.id}.jpg"))
+    return static(escape_uri_path(f"cards/card_imgs/{card.id}.jpg"))
