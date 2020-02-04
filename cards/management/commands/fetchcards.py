@@ -23,6 +23,7 @@ def get_or_none(json, prop):
 def make_static_dirs():
     os.makedirs(static_path("symbols"), exist_ok=True)
     os.makedirs(static_path("card_imgs"), exist_ok=True)
+    os.makedirs(static_path("set_imgs"), exist_ok=True)
 
 def static_path(subpath):
     return str(Path(os.path.dirname(__file__)).parent.parent) + static(f"cards/{subpath}")
@@ -78,10 +79,8 @@ class Command(BaseCommand):
         starttime = datetime.now()
         num_skipped = 0
         num_no_img = 0
-        self.stdout.write("Downloading card data...")
-        card_data = self.get_json(CARDDATA_URL)
-        self.stdout.write(self.style.SUCCESS("\tDone."))
         self.stdout.write("Downloading card images...")
+        card_data = self.get_json(CARDDATA_URL)
         for i in card_data:
             if "paper" not in i["games"]:
                 continue
@@ -98,6 +97,16 @@ class Command(BaseCommand):
         self.stdout.write(f"\tSkipped {num_skipped} alread downloaded files")
         self.stdout.write(f"\t{num_no_img} cards have missing images")
 
+        starttime = datetime.now()
+        num_skipped = 0
+        self.stdout.write("Downloading set symbols...")
+        set_data = self.get_json(SETDATA_URL)["data"]
+        for i in set_data:
+            if not fetch_if_missing(i["icon_svg_uri"], "set_imgs/" + i["code"] + ".svg"):
+                num_skipped += 1
+        self.stdout.write(f"\tProcessed {len(set_data)} entries")
+        self.stdout.write(f"\t{str(datetime.now() - starttime)[:-5]} elapsed")
+        self.stdout.write(f"\tSkipped {num_skipped} alread downloaded files")
 
     def update_db(self):
         self.stdout.write("Downloading set data...")
