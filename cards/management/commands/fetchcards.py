@@ -3,6 +3,7 @@ from decimal import Decimal
 from urllib.request import urlretrieve
 import requests
 import os
+from pathlib import Path
 from django.core.management.base import BaseCommand
 from django.core.exceptions import ObjectDoesNotExist
 from django.templatetags.static import static
@@ -20,10 +21,10 @@ def get_or_none(json, prop):
         return None
 
 def make_static_dirs():
-    os.makedirs(static_path("symbols"))
+    os.makedirs(static_path("symbols"), exist_ok=True)
 
 def static_path(subpath):
-    return os.path.dirname(__file__) + "/../.." + static(f"cards/{subpath}")
+    return str(Path(os.path.dirname(__file__)).parent.parent) + static(f"cards/{subpath}")
 
 def fetch_if_missing(url, output_subpath):
     outpath = static_path(output_subpath)
