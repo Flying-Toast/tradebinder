@@ -3,11 +3,12 @@ from django.templatetags.static import static
 from django.utils.encoding import escape_uri_path
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
+from cards import models
 
 
 register = template.Library()
 
-def _render_code(code):
+def render_code(code):
     if code == "½":
         code = "HALF"
     elif code == "∞":
@@ -38,7 +39,7 @@ def render_symbols(text):
             continue
         if ch == "}":
             inside = False
-            rendered_text += _render_code(code)
+            rendered_text += render_code(code)
             code = ""
             continue
         if inside:
@@ -46,3 +47,10 @@ def render_symbols(text):
         else:
             rendered_text += ch
     return mark_safe(rendered_text)
+
+
+@register.simple_tag
+def card_img(card):
+    if not isinstance(card, models.Card):
+        raise TypeError("The card_img tag requires a 'cards.models.Card' as the argument")
+    return escape_uri_path(static(f"cards/card_imgs/{card.id}.jpg"))
