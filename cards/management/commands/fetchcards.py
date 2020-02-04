@@ -56,6 +56,7 @@ class Command(BaseCommand):
         symbol_data = requests.get(SYMBOLDATA_URL).json()["data"]
         self.stdout.write("Downloading mana symbols...")
 
+        starttime = datetime.now()
         num_skipped = 0
         for i in symbol_data:
             url = i["svg_uri"]
@@ -64,8 +65,10 @@ class Command(BaseCommand):
                 num_skipped += 1
         self.stdout.write(self.style.SUCCESS("\tDone."))
         self.stdout.write(f"\tProcessed {len(symbol_data)} entries")
+        self.stdout.write(f"\t{str(datetime.now() - starttime)[:-5]} elapsed")
         self.stdout.write(f"\tSkipped {num_skipped} already downloaded files")
 
+        starttime = datetime.now()
         num_skipped = 0
         num_no_img = 0
         self.stdout.write("Downloading card data...")
@@ -84,6 +87,7 @@ class Command(BaseCommand):
                 num_no_img += 1
         self.stdout.write(self.style.SUCCESS("\tDone."))
         self.stdout.write(f"\tProcessed {len(card_data)} entries")
+        self.stdout.write(f"\t{str(datetime.now() - starttime)[:-5]} elapsed")
         self.stdout.write(f"\tSkipped {num_skipped} alread downloaded files")
         self.stdout.write(f"\t{num_no_img} cards have missing images")
 
