@@ -16,7 +16,7 @@ def _render_code(code):
     if "/" in code:
         code = "".join(code.split("/"))
     url = static(f"cards/symbols/{code}.svg")
-    return f'<img class="mana-symbol" src="{escape_uri_path(url)}" alt={escape(f"{{{alt_code}}}")}>'
+    return f'<img class="mana-symbol" src="{escape_uri_path(url)}" alt="{escape(f"{{{alt_code}}}")}">'
 
 
 @register.filter
