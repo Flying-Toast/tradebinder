@@ -102,6 +102,8 @@ class Command(BaseCommand):
         self.stdout.write("Downloading set symbols...")
         set_data = self.get_json(SETDATA_URL)["data"]
         for i in set_data:
+            if i["digital"]:
+                continue
             if not fetch_if_missing(i["icon_svg_uri"], "set_imgs/" + i["code"] + ".svg"):
                 num_skipped += 1
         self.stdout.write(f"\tProcessed {len(set_data)} entries")
