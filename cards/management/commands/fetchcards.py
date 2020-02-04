@@ -42,7 +42,14 @@ class Command(BaseCommand):
         parser.add_argument("--db-only", action="store_true", help="Only update the database (no static content)")
         parser.add_argument("--content-only", action="store_true", help="Only fetch static content (card images, etc)")
 
+    def get_json(self, url):
+        if url not in self.cached_data:
+            self.cached_data[url] = requests.get(url).json()
+        return self.cached_data[url]
+
     def handle(self, *args, **options):
+        self.cached_data = {}
+
         if options["db_only"]:
             self.update_db()
         elif options["content_only"]:
@@ -53,7 +60,7 @@ class Command(BaseCommand):
 
     def fetch_content(self):
         make_static_dirs()
-        symbol_data = requests.get(SYMBOLDATA_URL).json()["data"]
+        symbol_data = self.get_json(SYMBOLDATA_URL)["data"]
         self.stdout.write("Downloading mana symbols...")
 
         starttime = datetime.now()
@@ -72,7 +79,7 @@ class Command(BaseCommand):
         num_skipped = 0
         num_no_img = 0
         self.stdout.write("Downloading card data...")
-        card_data = requests.get(CARDDATA_URL).json()
+        card_data = self.get_json(CARDDATA_URL)
         self.stdout.write(self.style.SUCCESS("\tDone."))
         self.stdout.write("Downloading card images...")
         for i in card_data:
@@ -94,11 +101,11 @@ class Command(BaseCommand):
 
     def update_db(self):
         self.stdout.write("Downloading set data...")
-        set_data = requests.get(SETDATA_URL).json()["data"]
+        set_data = self.get_json(SETDATA_URL)["data"]
         self.stdout.write(self.style.SUCCESS("\tDone."))
 
         self.stdout.write("Downloading card data...")
-        card_data = requests.get(CARDDATA_URL).json()
+        card_data = self.get_json(CARDDATA_URL)
         self.stdout.write(self.style.SUCCESS("\tDone."))
 
         starttime = datetime.now()
