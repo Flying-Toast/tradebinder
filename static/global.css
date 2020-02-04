@@ -7,6 +7,24 @@ body {
 	font-family: sans-serif;
 }
 
+.card-symbol {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.mana-symbol {
+	height: 16px;
+}
+
+.set-symbol {
+	height: 35px;
+}
+
+.set-symbol.rarity-c { filter: invert(15%) sepia(8%) saturate(568%) hue-rotate(314deg) brightness(98%) contrast(81%); }
+.set-symbol.rarity-u { filter: invert(55%) sepia(8%) saturate(273%) hue-rotate(172deg) brightness(92%) contrast(87%); }
+.set-symbol.rarity-r { filter: invert(70%) sepia(44%) saturate(422%) hue-rotate(3deg) brightness(89%) contrast(90%); }
+.set-symbol.rarity-m { filter: invert(38%) sepia(58%) saturate(1775%) hue-rotate(3deg) brightness(95%) contrast(96%); }
+
 .navbar {
 	list-style: none;
 	background-color: #137EE3;
@@ -53,12 +71,4 @@ body {
 	content: "";
 	width: 100%;
 	height: 3px;
-}
-
-.mana-symbol {
-	display: inline-block;
-	height: 16px;
-	vertical-align: middle;
-	position: relative;
-	bottom: 1px;
 }
