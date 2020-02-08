@@ -1,16 +1,12 @@
-{% load static %}
-<!DOCTYPE html>
+{% extends "min_base.html" %}
 
-<html>
+{% block min_head %}
+	{# <head> content for base.html goes here #}
+	{% block head %}
+	{% endblock %}
+{% endblock %}
 
-<head>
-	<title>{% block title %}{% endblock %}</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="{% static "global.css" %}">
-</head>
-
-<body>
+{% block min_content %}
 	<ul class="navbar">
 		<li class="nav-logo"><a href="{% url "homepage:home" %}">Trade Binder</a></li>
 		<li class="nav-item"><a class="nav-link" href="{% url "homepage:home" %}">item 1</a></li>
@@ -18,10 +14,6 @@
 		<li class="nav-item"><a class="nav-link" href="{% url "homepage:home" %}">item 3</a></li>
 		<li class="nav-item"><a class="nav-link" href="{% url "homepage:home" %}">Login</a></li>
 	</ul>
-	<div class="main-content">
 	{% block content %}
 	{% endblock %}
-	</div>
-</body>
-
-</html>
+{% endblock %}
