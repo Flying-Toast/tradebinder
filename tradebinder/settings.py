@@ -107,6 +107,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Accounts 'n stuff
 
 AUTH_USER_MODEL = "trading.User"
+LOGIN_REDIRECT_URL = "/"
 
 
 # Internationalization
