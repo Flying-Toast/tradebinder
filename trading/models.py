@@ -7,5 +7,10 @@ class User(AbstractUser):
     pass
 
 
-class Binder(models.Model):
+class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    binder = models.OneToOneField("Binder", on_delete=models.CASCADE)
+
+
+class Binder(models.Model):
+    pass
