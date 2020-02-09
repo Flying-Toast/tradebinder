@@ -22,7 +22,7 @@ def render_code(code):
 
 @register.filter
 def render_symbols(text):
-    if len(text) == 0:
+    if not text:
         return ""
 
     rendered_text = ""
