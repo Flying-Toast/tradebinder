@@ -57,10 +57,12 @@ def card_img(card):
 
 
 @register.simple_tag
-def set_symbol(abbrev, rarity=None):
+def set_symbol(set_obj, rarity=None):
     if rarity is not None and rarity not in ['c', 'u', 'r', 'm']:
         raise RuntimeError("set_symbol tag requires 'rarity' (optional) be one of: 'c', 'u', 'r', 'm'")
-    url = static(escape_uri_path(f"cards/set_imgs/{abbrev.lower()}.svg"))
+    if not isinstance(set_obj, models.Set):
+        raise TypeError("The set_symbol tag requires a 'cards.models.Set'")
+    url = static(escape_uri_path(f"cards/set_imgs/{set_obj.code.lower()}.svg"))
     return mark_safe(
-        f'<img class="card-symbol set-symbol{" rarity-"+rarity if rarity else ""}" src="{url}" alt="{escape(abbrev)}">'
+        f'<img class="card-symbol set-symbol{" rarity-"+rarity if rarity else ""}" src="{url}" title="{set_obj.name} ({set_obj.code.upper()})" alt="{escape(set_obj.code)}">'
     )
