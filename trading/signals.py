@@ -6,8 +6,10 @@ from . import models
 @receiver(post_save, sender=models.User)
 def make_profile_on_user_creation(sender, instance, created, **kwargs):
     if created:
+        tradebinder = models.Binder()
+        tradebinder.save()
         profile = models.UserProfile(
             user=instance,
-            binder=models.Binder(),
+            binder=tradebinder,
         )
         profile.save()
