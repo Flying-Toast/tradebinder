@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load mtg %}
+
+{% block title %}{{ card.name }}{% endblock %}
+
+{% block content %}
+	<h1>Card detail for {{ card.name }}</h1>
+	<img src="{% card_img card %}">
+	<h4>{{ card.get_absolute_url }}</h4>
+{% endblock %}
