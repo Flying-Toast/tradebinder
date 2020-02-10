@@ -31,6 +31,8 @@ class Have(models.Model):
 
 class Want(models.Model):
     binder = models.ForeignKey(Binder, on_delete=models.CASCADE)
+    oracle_id = models.UUIDField()
+    set = models.ForeignKey(cards.models.Set, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.card)
