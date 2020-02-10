@@ -58,6 +58,8 @@ body {
 	display: inline-block;
 	width: 100%;
 	padding-top: 3px;
+	color: lightgrey;
+	cursor: pointer;
 }
 
 .nav-link:hover {
