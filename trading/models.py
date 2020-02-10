@@ -12,15 +12,25 @@ class UserProfile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     binder = models.OneToOneField("Binder", on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"{self.user}'s profile"
+
 
 class Binder(models.Model):
-    pass
+    def __str__(self):
+        return f"{self.userprofile.user}'s trade binder"
 
 
 class Have(models.Model):
     binder = models.ForeignKey(Binder, on_delete=models.CASCADE)
     card = models.ForeignKey(cards.models.Card, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return str(self.card)
+
 
 class Want(models.Model):
     binder = models.ForeignKey(Binder, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return str(self.card)
