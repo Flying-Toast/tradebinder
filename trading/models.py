@@ -35,4 +35,4 @@ class Want(models.Model):
     set = models.ForeignKey(cards.models.Set, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
-        return str(self.card)
+        return cards.models.Card.objects.filter(oracle_id=self.oracle_id)[0].name
